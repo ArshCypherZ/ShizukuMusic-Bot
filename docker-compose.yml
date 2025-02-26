@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  shizukumusicbot:
+    build: .
+    image: shizukumusicbot:${TAG}
+    container_name: shizukumusicbot
+    network_mode: host
+    pull_policy: never
+  restarter:
+    image: docker:cli
+    volumes: ["/var/run/docker.sock:/var/run/docker.sock"]
+    command: ["/bin/sh", "-c", "while true; do sleep 18000; docker restart shizukumusicbot; done"]
+    restart: unless-stopped
+    network_mode: host
+
+networks:
+  default: 
+    external: true
+    name: host
